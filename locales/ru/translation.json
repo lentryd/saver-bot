@@ -1,0 +1,92 @@
+{
+    "start": {
+        "greeting": "👋 Привет, {{name}}!",
+        "title": "🎬 **Я помогу скачать видео с TikTok и YouTube Shorts!**",
+        "howToUse": "**Как пользоваться:**",
+        "inlineMode": "📱 **В любом чате (Inline режим):**",
+        "step1": "1️⃣ Напиши @{{username}} и вставь ссылку на видео",
+        "step2": "2️⃣ Выбери результат из списка",
+        "step3": "3️⃣ Для YouTube Shorts нажми кнопку \"🔄 Загрузить видео\"",
+        "step4": "4️⃣ Видео появится в чате!",
+        "supportedPlatforms": "**Поддерживаемые платформы:**",
+        "tiktok": "• TikTok (загрузка мгновенная)",
+        "youtube": "• YouTube Shorts (10-15 секунд)",
+        "features": "**Особенности:**",
+        "feature1": "✅ Работает в любом чате",
+        "feature2": "✅ Кеширование: повторные загрузки мгновенны",
+        "feature3": "✅ Высокое качество (до 720p)",
+        "examples": "💡 **Примеры ссылок:**",
+        "exampleTiktok": "• `https://www.tiktok.com/@user/video/...`",
+        "exampleTiktokShort": "• `https://vm.tiktok.com/...`",
+        "exampleYoutube": "• `https://youtube.com/shorts/...`",
+        "tryNow": "🚀 Попробуй прямо сейчас! Начни вводить в любом чате:",
+        "tryExample": "@{{username}} [ссылка на видео]",
+        "error": "❌ Произошла ошибка. Попробуйте позже."
+    },
+    "inline": {
+        "empty": {
+            "title": "📱 Video Downloader",
+            "description": "Вставьте ссылку на видео TikTok или YouTube Shorts"
+        },
+        "invalidUrl": {
+            "title": "❌ Неверная ссылка",
+            "description": "Поддерживаются TikTok и YouTube Shorts",
+            "message": "❌ *Неверная ссылка*\n\nПоддерживаются только:\n• TikTok\n• YouTube Shorts"
+        },
+        "createIdError": {
+            "title": "❌ Ошибка",
+            "description": "Не удалось создать ID для видео",
+            "message": "❌ *Ошибка при создании ID для видео*\n\nПопробуйте позже."
+        },
+        "youtubeReady": {
+            "title": "📹 YouTube Shorts",
+            "description": "Нажмите кнопку для загрузки видео",
+            "button": "🔄 Загрузить видео"
+        },
+        "loadError": {
+            "title": "❌ Ошибка загрузки",
+            "message": "❌ *Ошибка при загрузке видео*\n\n{{error}}",
+            "unknownError": "Неизвестная ошибка"
+        },
+        "generalError": {
+            "title": "❌ Произошла ошибка",
+            "description": "Попробуйте еще раз",
+            "message": "❌ *Произошла ошибка*\n\nПожалуйста, попробуйте еще раз позже."
+        },
+        "openIn": "🔗 [Открыть в {{platform}}]({{url}})"
+    },
+    "callback": {
+        "processing": "⏳ Видео обрабатывается... Подождите еще немного.",
+        "processingCaption": "⏳ *Обработка видео...*\n\nЗагрузка YouTube видео началась. Видео появится автоматически через 10-15 секунд.\n\n_(Если возникнет ошибка, кнопка останется для повторной попытки)_",
+        "inlineOnly": "Ошибка: это работает только с inline сообщениями",
+        "success": "✅ Видео успешно загружено!",
+        "successCaption": "✅ *Видео загружено!*",
+        "noVideoUrl": {
+            "alert": "❌ Не удалось получить прямую ссылку на видео. YouTube может блокировать загрузку.",
+            "caption": "❌ *Не удалось загрузить видео*\n\nYouTube заблокировал получение прямой ссылки на это видео.\nПопробуйте другое видео или откройте его в браузере."
+        },
+        "error": {
+            "alert": "❌ Не удалось загрузить видео",
+            "caption": "❌ *Ошибка при загрузке видео*\n\n{{error}}",
+            "unknown": "Неизвестная ошибка",
+            "general": "❌ Произошла ошибка",
+            "loadError": "❌ *Ошибка загрузки*\n\n{{error}}\n\n_Нажмите кнопку для повторной попытки_",
+            "loadErrorDefault": "Не удалось загрузить видео",
+            "sendError": "❌ *Ошибка отправки видео*\n\nНе удалось отправить видео.\n\n_Нажмите кнопку для повторной попытки_"
+        }
+    },
+    "video": {
+        "emoji": {
+            "tiktok": "🎬",
+            "youtube": "📹"
+        },
+        "title": "📹 {{title}}",
+        "author": "👤 {{author}}",
+        "views": "👁 {{views}}",
+        "duration": "⏱ {{duration}}"
+    },
+    "platform": {
+        "tiktok": "TikTok",
+        "youtube": "YouTube"
+    }
+}

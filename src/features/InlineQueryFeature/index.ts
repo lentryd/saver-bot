@@ -1,0 +1,1 @@
+export { InlineQueryFeature } from './InlineQueryFeature';

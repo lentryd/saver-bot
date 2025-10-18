@@ -1,0 +1,15 @@
+.eslintrc.json
+eslint.config.mjs
+ecosystem.config.js
+next.config.js
+tsconfig.json
+package.json
+package-lock.json
+next-env.d.ts
+.vscode
+
+node_modules
+public
+build
+dist
+.next
