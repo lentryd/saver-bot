@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
 import path from 'path';
 
 import { config } from '@/config';
@@ -14,6 +13,7 @@ export type SupportedLocale = 'ru';
  * Инициализация i18next (только русский язык)
  */
 export async function initI18n(): Promise<void> {
+    const Backend = (await import('i18next-fs-backend')).default;
     await i18next.use(Backend).init({
         lng: 'ru', // единственный поддерживаемый язык
         fallbackLng: 'ru',
