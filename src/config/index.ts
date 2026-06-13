@@ -21,6 +21,9 @@ export const config = {
     HTTP_TIMEOUT: parseInt(process.env.HTTP_TIMEOUT || '30000', 10),
     MAX_RETRY_ATTEMPTS: parseInt(process.env.MAX_RETRY_ATTEMPTS || '3', 10),
 
+    // Максимальное время обработки одного апдейта, мс (защита от зависания хендлера)
+    HANDLER_TIMEOUT: parseInt(process.env.HANDLER_TIMEOUT || '60000', 10),
+
     // YouTube Service
     YOUTUBE_SERVICE_URL: process.env.YOUTUBE_SERVICE_URL || 'http://localhost:5001',
 } as const;

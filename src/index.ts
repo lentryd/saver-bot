@@ -1,3 +1,4 @@
+import { run } from '@grammyjs/runner';
 import { Bot } from 'grammy';
 
 import { config } from '@/config';
@@ -7,6 +8,7 @@ import { initI18n } from '@/utils/i18n';
 import { logger } from '@/utils/Logger';
 import { setupGracefulShutdown } from '@/utils/Process';
 import { RedisSubscriber } from '@/utils/RedisSubscriber';
+import { timeoutMiddleware } from '@/utils/timeoutMiddleware';
 
 /**
  * Основная функция запуска бота
@@ -26,6 +28,10 @@ async function main(): Promise<void> {
     // Сохраняем redisSubscriber в контекст бота для доступа из features
     bot.redisSubscriber = redisSubscriber;
 
+    // Ограничиваем время обработки одного апдейта, чтобы зависший запрос
+    // не блокировал бота. Должно стоять до регистрации фич.
+    bot.use(timeoutMiddleware(config.HANDLER_TIMEOUT));
+
     // Регистрируем фичи
     await registerFeatures(bot);
 
@@ -37,17 +43,26 @@ async function main(): Promise<void> {
         });
     });
 
+    // Запускаем бота в polling режиме с конкурентной обработкой апдейтов.
+    // Один медленный/зависший апдейт не блокирует остальные.
+    logger.info('🚀 Запуск бота в режиме polling...');
+
+    const runner = run(bot);
+
     // Настраиваем graceful shutdown
     setupGracefulShutdown(async () => {
         logger.info('Останавливаем бота...');
         await redisSubscriber.close();
-        await bot.stop();
+
+        if (runner.isRunning()) {
+            await runner.stop();
+        }
+
         logger.info('Бот остановлен');
     });
 
-    // Запускаем бота в polling режиме
-    logger.info('🚀 Запуск бота в режиме polling...');
-    await bot.start();
+    // Ждём завершения работы раннера
+    await runner.task();
 }
 
 // Запуск приложения

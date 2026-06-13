@@ -14,6 +14,7 @@ export type SupportedLocale = 'ru';
  */
 export async function initI18n(): Promise<void> {
     const Backend = (await import('i18next-fs-backend')).default;
+
     await i18next.use(Backend).init({
         lng: 'ru', // единственный поддерживаемый язык
         fallbackLng: 'ru',
