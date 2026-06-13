@@ -1,3 +1,5 @@
+import { MarkdownEscaper } from './MarkdownEscaper';
+
 /**
  * Утилита для форматирования информации о видео
  */
@@ -24,7 +26,7 @@ export class VideoFormatter {
         const tailParts: string[] = [];
 
         if (video.author) {
-            tailParts.push(`👤 ${video.author}`);
+            tailParts.push(`👤 ${MarkdownEscaper.escape(video.author)}`);
         }
 
         // Статистика
@@ -51,7 +53,9 @@ export class VideoFormatter {
             // Резервируем место под хвост и переносы строк между блоками
             const reserved = tail.length > 0 ? tail.length + 1 : 0;
             const available = this.MAX_CAPTION_LENGTH - reserved - '📹 '.length;
-            const title = this.truncate(video.title, available);
+            // Экранируем спецсимволы Markdown до усечения, чтобы итоговая длина
+            // совпадала с тем, что реально уходит в Telegram.
+            const title = this.truncate(MarkdownEscaper.escape(video.title), available);
 
             parts.push(`📹 ${title}`);
         }
@@ -79,7 +83,24 @@ export class VideoFormatter {
             return text.slice(0, maxLength);
         }
 
-        return `${text.slice(0, maxLength - 1).trimEnd()}…`;
+        // Убираем «висящий» обратный слэш на месте обрезки, иначе он экранирует
+        // многоточие и ломает Markdown-разметку.
+        const sliced = this.stripDanglingBackslash(text.slice(0, maxLength - 1).trimEnd());
+
+        return `${sliced}…`;
+    }
+
+    /**
+     * Удаляет незакрытый (нечётный) обратный слэш в конце строки
+     */
+    private static stripDanglingBackslash(text: string): string {
+        const match = text.match(/\\+$/);
+
+        if (match && match[0].length % 2 === 1) {
+            return text.slice(0, -1);
+        }
+
+        return text;
     }
 
     /**
