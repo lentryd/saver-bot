@@ -26,7 +26,27 @@ export const config = {
 
     // YouTube Service
     YOUTUBE_SERVICE_URL: process.env.YOUTUBE_SERVICE_URL || 'http://localhost:5001',
+
+    // Служебный чат/канал для заливки видео ради получения file_id.
+    // Нужен, чтобы отправлять видео в inline-сообщения (Telegram не умеет
+    // скачивать прямые googlevideo/tiktok URL для inline-результатов).
+    STORAGE_CHAT_ID: process.env.STORAGE_CHAT_ID || '',
 } as const;
+
+/**
+ * Возвращает идентификатор служебного чата для заливки видео.
+ * Числовой ID (например, -1001234567890) приводится к number,
+ * @username остаётся строкой. Если не задан — undefined.
+ */
+export function getStorageChatId(): number | string | undefined {
+    const raw = config.STORAGE_CHAT_ID.trim();
+
+    if (!raw) {
+        return undefined;
+    }
+
+    return /^-?\d+$/.test(raw) ? Number(raw) : raw;
+}
 
 /**
  * Получение списка ID администраторов из конфигурации

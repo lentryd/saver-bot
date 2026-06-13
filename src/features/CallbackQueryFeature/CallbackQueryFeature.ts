@@ -5,6 +5,7 @@ import type { IBotContext } from '@/types/BotContext';
 import { IBaseBotFeature } from '@/types/Feature';
 import { t } from '@/utils/i18n';
 import { logger } from '@/utils/Logger';
+import { VideoFileResolver } from '@/utils/VideoFileResolver';
 import { VideoFormatter } from '@/utils/VideoFormatter';
 import { videoIdStorage } from '@/utils/VideoIdStorage';
 import { youtubeVideoService } from '@/utils/YouTubeVideoService';
@@ -141,9 +142,13 @@ export class CallbackQueryFeature extends IBaseBotFeature {
                             platform: 'youtube',
                         });
 
+                    // Telegram не может скачать прямой URL для inline-сообщения,
+                    // поэтому заливаем видео в служебный чат и берём file_id.
+                    const fileId = await VideoFileResolver.resolveFileId(ctx.api, result.video_url);
+
                     await ctx.editMessageMedia({
                         type: 'video',
-                        media: result.video_url,
+                        media: fileId ?? result.video_url,
                         caption,
                         parse_mode: 'Markdown',
                     });

@@ -4,6 +4,7 @@ import { InlineKeyboard } from 'grammy';
 
 import { t } from '@/utils/i18n';
 import { logger } from '@/utils/Logger';
+import { VideoFileResolver } from '@/utils/VideoFileResolver';
 import { VideoFormatter } from '@/utils/VideoFormatter';
 
 interface IVideoReadyEvent {
@@ -205,9 +206,13 @@ export class RedisSubscriber<C extends Context = Context> {
         });
 
         try {
+            // Telegram не может скачать прямой URL для inline-сообщения,
+            // поэтому заливаем видео в служебный чат и берём file_id.
+            const fileId = await VideoFileResolver.resolveFileId(this.bot.api, event.video_url);
+
             await this.bot.api.editMessageMediaInline(inlineMessageId, {
                 type: 'video',
-                media: event.video_url,
+                media: fileId ?? event.video_url,
                 caption,
                 parse_mode: 'Markdown',
             });
