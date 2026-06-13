@@ -3,6 +3,12 @@
  */
 export class VideoFormatter {
     /**
+     * Максимальная длина подписи к медиа в Telegram (1024 символа).
+     * Берём с запасом, чтобы Markdown-разметка не выходила за лимит.
+     */
+    private static readonly MAX_CAPTION_LENGTH = 1024;
+
+    /**
      * Форматирует подпись для видео (унифицированный формат для всех платформ)
      */
     public static formatVideoCaption(video: {
@@ -14,14 +20,11 @@ export class VideoFormatter {
     }): string {
         const parts: string[] = [];
 
-        // Заголовок
-        if (video.title) {
-            parts.push(`📹 ${video.title}`);
-        }
-
         // Автор
+        const tailParts: string[] = [];
+
         if (video.author) {
-            parts.push(`👤 ${video.author}`);
+            tailParts.push(`👤 ${video.author}`);
         }
 
         // Статистика
@@ -36,11 +39,47 @@ export class VideoFormatter {
         }
 
         if (stats.length > 0) {
-            parts.push('');
-            parts.push(stats.join(' • '));
+            tailParts.push('');
+            tailParts.push(stats.join(' • '));
+        }
+
+        // Хвост (автор + статистика) показываем целиком, заголовок усекаем под лимит
+        const tail = tailParts.join('\n');
+
+        // Заголовок
+        if (video.title) {
+            // Резервируем место под хвост и переносы строк между блоками
+            const reserved = tail.length > 0 ? tail.length + 1 : 0;
+            const available = this.MAX_CAPTION_LENGTH - reserved - '📹 '.length;
+            const title = this.truncate(video.title, available);
+
+            parts.push(`📹 ${title}`);
+        }
+
+        if (tail.length > 0) {
+            parts.push(tail);
         }
 
         return parts.join('\n');
+    }
+
+    /**
+     * Усекает текст до заданной длины, добавляя многоточие
+     */
+    private static truncate(text: string, maxLength: number): string {
+        if (maxLength <= 0) {
+            return '';
+        }
+
+        if (text.length <= maxLength) {
+            return text;
+        }
+
+        if (maxLength <= 1) {
+            return text.slice(0, maxLength);
+        }
+
+        return `${text.slice(0, maxLength - 1).trimEnd()}…`;
     }
 
     /**
